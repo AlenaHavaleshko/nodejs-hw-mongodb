@@ -20,6 +20,11 @@ app.use(pino());
 // Мідлварка,щоб розпарсити обьект боді
 app.use(express.json());
 
+// Додаємо кореневий маршрут
+app.get("/", (req, res) => {
+  res.send("Welcome to Contacts API!");
+});
+
 app.use('/contacts', contactsRouter);  // Додаємо роутер до app як middleware
 
 // Handle 404
