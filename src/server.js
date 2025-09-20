@@ -21,7 +21,7 @@ app.use(pino());
 app.use(express.json());
 
 // Додаємо кореневий маршрут
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send("Welcome to Contacts API!");
 });
 
@@ -37,7 +37,7 @@ export async function setupServer() {
     await initMongoConnection(); // Підключення до MongoDB
 
     // Запуск сервера після налаштування маршрутів
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on port ${PORT}`);
     });
 
