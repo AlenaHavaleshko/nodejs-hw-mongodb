@@ -1,19 +1,34 @@
+import { isValidObjectId } from 'mongoose';
 import { getContacts, getContactById, createContact, deleteContact, updateContact } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from "../utils/parsePaginationParams.js";
+import { parseSortParams } from "../utils/parseSortParams.js";
+import { parseFilterParams } from "../utils/parseFilterParams.js";
+import { parseNumber } from "../utils/parseNumber.js";
 
 // GET
 export const getContactsController = async (req, res, next) => {
- try {
-  const contacts = await getContacts();
 
-  res.json({
-   status: 200,
-   message: 'Contacts get successfully!',
-   data: contacts,
-  });
- } catch (error) {
-  next(error);
- }
+ const {page, perPage} = parsePaginationParams(req.query);
+ const { sortBy, sortOrder } = parseSortParams(req.query);
+ const filter = parseFilterParams(req.query); // 👈 фільтрація
+
+
+ const contacts = await getContacts(
+  {
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  }
+ );
+
+ res.json({
+  status: 200,
+  message: 'Contacts get successfully!',
+  data: contacts,
+ });
 }
 
 // GET id
@@ -21,28 +36,31 @@ export const getContactByIdController = async (req, res, next) => {
 
  const { id } = req.params;
 
- try {
-  const contact = await getContactById(id);
+ console.log('ID:', id, 'isValid:', isValidObjectId(id));
 
-  if (!contact) {
-   throw createHttpError(404, 'Contact not found');
-  }
-
-  res.json({
-   status: 200,
-   message: `Successfully found contact with id ${id}!`,
-   data: contact,
+ if (!isValidObjectId(id)) {
+  return res.status(400).json({
+   status: 400,
+   message: 'Invalid id',
+   data: null,
   });
-
- } catch (error) {
-  next(error);
  }
+
+ const contact = await getContactById(id);
+
+ if (!contact) {
+  throw createHttpError(404, 'Contact not found');
+ }
+
+ res.json({
+  status: 200,
+  message: `Successfully found contact with id ${id}!`,
+  data: contact,
+ });
 }
 
 // POST
 export async function createContactController(req, res, next) {
-
- try {
 
  const contact = await createContact(req.body);
 
@@ -51,49 +69,38 @@ export async function createContactController(req, res, next) {
   message: 'Contact created successfully!',
   data: contact,
  });
- } catch (error) {
-  next(error);
- }
 }
 
 // DELETE
 export async function deleteContactController(req, res, next) {
  const { id } = req.params;
 
- try {
-  const result = await deleteContact(id);
+ const result = await deleteContact(id);
 
-  if (!result) {
-   throw createHttpError(404, 'Contact not found');
-  }
-
-  res.status(204).send();
- } catch (error) {
-  next(error);
+ if (!result) {
+  throw createHttpError(404, 'Contact not found');
  }
+
+ res.status(204).send();
 
 }
 
 // Update PATCH
 
 export async function patchContactController(req, res, next) {
-const { id } = req.params;
- try {
-  const result = await updateContact(id, req.body,);
-  console.log('result:', result);
+ const { id } = req.params;
 
-  if (!result) {
-   next(createHttpError(404, 'Contact not found'));
-   return;
-  }
+ const result = await updateContact(id, req.body,);
+ console.log('result:', result);
+
+ if (!result) {
+  next(createHttpError(404, 'Contact not found'));
+  return;
+ }
 
  res.status(200).json({
   status: 200,
   message: "Successfully patched a contact!",
   data: result.contact,
  })
-
- }catch (error) {
-  next(error);
- }
 }

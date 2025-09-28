@@ -20,6 +20,11 @@ app.use(pino());
 // Мідлварка,щоб розпарсити обьект боді
 app.use(express.json());
 
+// Додаємо кореневий маршрут
+app.get('/', (req, res) => {
+  res.send("Welcome to Contacts API!");
+});
+
 app.use('/contacts', contactsRouter);  // Додаємо роутер до app як middleware
 
 // Handle 404
@@ -32,7 +37,7 @@ export async function setupServer() {
     await initMongoConnection(); // Підключення до MongoDB
 
     // Запуск сервера після налаштування маршрутів
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on port ${PORT}`);
     });
 
