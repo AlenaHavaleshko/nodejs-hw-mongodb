@@ -10,22 +10,25 @@ import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import {isValidId} from "../middlewares/isValidId.js";
 import {validateBody} from "../middlewares/validateBody.js";
 import {contactSchema, updateContactSchema} from "../validation/contacts.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 const router = Router ();
+
+router.use(authenticate);
 
 // Роут для отримання контактів
 router.get('/', ctrlWrapper(getContactsController));
 
 // Роут для отримання контакту по id
-router.get("/:id", isValidId, ctrlWrapper(getContactByIdController));
+router.get("/:contactId", isValidId, ctrlWrapper(getContactByIdController));
 
 // Створюємо контакт
 router.post('/', validateBody(contactSchema), ctrlWrapper(createContactController));
 
 // Видаляємо контакт
-router.delete('/:id', isValidId, ctrlWrapper(deleteContactController))
+router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController))
 
 // Оновлюємо контакт PATCH
-router.patch('/:id', isValidId,validateBody(updateContactSchema), ctrlWrapper(patchContactController))
+router.patch('/:contactId', isValidId,validateBody(updateContactSchema), ctrlWrapper(patchContactController))
 
 export default router;

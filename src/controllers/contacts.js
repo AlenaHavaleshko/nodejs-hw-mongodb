@@ -8,7 +8,7 @@ import { parseNumber } from "../utils/parseNumber.js";
 
 // GET
 export const getContactsController = async (req, res, next) => {
-
+   console.log(req.user);
  const {page, perPage} = parsePaginationParams(req.query);
  const { sortBy, sortOrder } = parseSortParams(req.query);
  const filter = parseFilterParams(req.query); // 👈 фільтрація
@@ -21,6 +21,7 @@ export const getContactsController = async (req, res, next) => {
     sortBy,
     sortOrder,
     filter,
+    userId: req.user.id, // 👈 фільтрація по userId
   }
  );
 
@@ -52,6 +53,11 @@ export const getContactByIdController = async (req, res, next) => {
   throw createHttpError(404, 'Contact not found');
  }
 
+ if(contact.userId.toString() !== req.user.id.toString()) {
+  // throw createHttpError(403, 'You do not have permission to access this contact'); // forbidden
+ //
+}
+
  res.json({
   status: 200,
   message: `Successfully found contact with id ${id}!`,
@@ -62,7 +68,7 @@ export const getContactByIdController = async (req, res, next) => {
 // POST
 export async function createContactController(req, res, next) {
 
- const contact = await createContact(req.body);
+ const contact = await createContact({...req.body, userId: req.user._id});
 
  res.status(201).json({
   status: 201,
