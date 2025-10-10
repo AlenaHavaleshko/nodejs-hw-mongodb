@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
   res.send("Welcome to Contacts API!");
 });
 
-app.use("/api", routes); // Використовуємо роутер для всіх маршрутів, що починаються з /api
+app.use("/", routes); // Використовуємо роутер для всіх маршрутів, що починаються з /api
 
 // Handle 404
 app.use(notFoundHandler);
