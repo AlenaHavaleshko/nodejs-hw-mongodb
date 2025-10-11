@@ -1,5 +1,6 @@
 import { THIRTY_DAYS } from "../constants/index.js";
 import { registerUser, loginUser, logoutUser, refreshUsersSession } from "../services/auth.js";
+import { requestResetToken } from  '../services/auth.js';
 
 // регістрація користувача
 export const registerUserController = async (req, res) => {
@@ -26,7 +27,7 @@ export const loginUserController = async (req, res,) => {
 
   res.cookie('refreshToken', session.refreshToken, {
    httpOnly: true,
-   
+
    expires: new Date(Date.now() + THIRTY_DAYS),
   });
 
@@ -100,3 +101,14 @@ export const logoutUserController = async (req, res) => {
    res.status(error.statusCode || 500).json({ error: error.message });
   };
  };
+
+ //ресет пароля
+ export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+
+  res.json({
+   message: 'Reset password email was successful sent!',
+   status: 200,
+   data: {},
+  })
+ }

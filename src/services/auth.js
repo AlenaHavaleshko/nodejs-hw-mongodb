@@ -6,6 +6,7 @@ import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import { Session } from '../models/session.js';
 import { access } from "fs";
 import { th } from "@faker-js/faker";
+import { create } from "domain";
 
 // реєстрація користувача
 export const registerUser = async (payload) => {
@@ -100,3 +101,12 @@ return await Session.create({
  ...newSession,
 });
 };
+
+export const requestResetToken = async (email) => {
+ const user = await User.findOne({ email });
+ if (!user) {
+  throw createHttpError(404, 'User not found');
+ }
+
+
+}
