@@ -7,6 +7,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import routes from './routers/index.js';
 import cookieParser from 'cookie-parser';
+import { UPLOAD_DIR } from './constants/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,7 +19,7 @@ app.use(pino());
 // Мідлварка,щоб розпарсити обьект боді
 app.use(express.json());
 app.use(cookieParser()); //перед роутами
-
+app.use('/uploads', express.static(UPLOAD_DIR));
 // Додаємо кореневий маршрут
 app.get('/', (req, res) => {
   res.send("Welcome to Contacts API!");

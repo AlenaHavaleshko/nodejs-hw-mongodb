@@ -24,6 +24,6 @@ router.post('/refresh', ctrlWrapper(refreshUsersSessionController));
 
 router.post('/send-reset-email',  validateBody(requestPasswordResetSchema), ctrlWrapper(requestPasswordResetController));
 
-router.post('/reset-password', validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController));
+router.post('/reset-pwd', validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController));
 
 export default router;

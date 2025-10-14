@@ -14,7 +14,6 @@ import Handlebars from 'handlebars';
 import { sendEmail } from "../utils/sendMail.js";
 
 const REQUEST_PASSWORD_RESET_TEMPLATE = fs.readFileSync(path.resolve("src/templates/reset-password.html"), { encoding: "UTF-8" });
-console.log(REQUEST_PASSWORD_RESET_TEMPLATE);
 
 
 // реєстрація користувача
@@ -27,7 +26,6 @@ export const registerUser = async (payload) => {
 
   // хешування
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  console.log('Hash', encryptedPassword);
 
   return User.create({ ...payload, password: encryptedPassword });
 };
@@ -126,8 +124,6 @@ export const requestPasswordReset = async (email) => {
 
   const template = Handlebars.compile(REQUEST_PASSWORD_RESET_TEMPLATE);
 
-  console.log('======================')
-  console.log(getEnvVariable(SMTP.SMTP_FROM))
   await sendEmail({
     from: getEnvVariable(SMTP.SMTP_FROM),
     to: email,
@@ -143,19 +139,18 @@ export async function resetPassword(token, password) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.findByIdAndUpdate(decoded.sub, {password: hashedPassword});
+    const user = await User.findByIdAndUpdate(decoded.sub, {password: hashedPassword});
+
+    if (!user) {
+  throw createHttpError.NotFound("User not found!");
+}
+
+    await Session.deleteMany({ userId: decoded.sub });
 
   } catch(error) {
-    if(error.name === "TokenExpiredError") {
-      throw createHttpError.Unauthorized("Token is expired");
+    if(error.name === "TokenExpiredError" || error.name === "JsonWebTokenError" ) {
+      throw createHttpError.Unauthorized("Token is expired or invalid.");
     }
-    if(error.name === "JsonWebTokenError") {
-      throw createHttpError.Unauthorized("Token is unauthorized");
-    }
-
     throw error;
-
-
   }
-
 }
