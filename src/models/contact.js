@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+
+import Joi from 'joi';
+import mongoose, { Schema } from "mongoose";
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -14,6 +16,8 @@ const contactSchema = new mongoose.Schema({
   email: {
     type: String,
     trim: true,
+    required: true,
+    unique: true,
   },
   isFavourite: {
     type: Boolean,
@@ -24,6 +28,16 @@ const contactSchema = new mongoose.Schema({
     enum: ["work", "home", "personal"],
     required: true,
     default: "personal"
+  },
+
+  photo: {
+    type: String,
+  },
+
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
 },
   {
