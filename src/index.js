@@ -18,7 +18,3 @@ const bootstrap = async () => {
 
 void bootstrap();
 
-// setupServer().catch((error) => {
-//   console.error('Error starting server:', error);
-// });
-
