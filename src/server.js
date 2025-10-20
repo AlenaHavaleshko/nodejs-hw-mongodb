@@ -8,6 +8,7 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import routes from './routers/index.js';
 import cookieParser from 'cookie-parser';
 import { UPLOAD_DIR } from './constants/index.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,12 +21,13 @@ app.use(pino());
 app.use(express.json());
 app.use(cookieParser()); //перед роутами
 app.use('/uploads', express.static(UPLOAD_DIR));
+app.use('/api-docs', swaggerDocs());
 // Додаємо кореневий маршрут
 app.get('/', (req, res) => {
   res.send("Welcome to Contacts API!");
 });
 
-app.use("/", routes); 
+app.use("/", routes);
 
 // Handle 404
 app.use(notFoundHandler);
