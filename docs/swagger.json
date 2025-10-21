@@ -367,7 +367,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -379,7 +379,7 @@
                     "type": "string",
                     "example": "john.doe@example.com"
                   },
-                  "phone": {
+                  "phoneNumber": {
                     "type": "string",
                     "example": "+380665556677"
                   }
@@ -474,29 +474,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Successfully deleted contact",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully deleted contact with id 68eaaf8fa9ad4f0487d3d847!"
-                    }
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "Successfully deleted contact"
           },
           "400": {
             "$ref": "#/components/responses/400"
