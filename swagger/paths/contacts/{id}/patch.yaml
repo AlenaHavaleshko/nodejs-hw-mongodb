@@ -29,6 +29,15 @@ requestBody:
           phoneNumber:
             type: string
             example: "+380665556677"
+          contactType:
+            type: string
+            enum: ["work", "home", "personal"]
+          isFavourite:
+            type: boolean
+            example: false
+          photo:
+            type: string
+            format: binary
         description: Fields to update (at least one field is required)
 responses:
   '200':

@@ -14,10 +14,7 @@
           - name
           - phoneNumber
           - email
-          - userId
           - contactType
-          - createdAt
-          - updatedAt
         properties:
           name:
             description: "Contact's name"
@@ -25,16 +22,12 @@
             example: "Taras Shevchenko"
           phoneNumber:
             description: "Contact's phone number"
-            type: number
-            example: 0556987452
+            type: string
+            example: "+380556987452"
           email:
             description: "Contact's email"
             type: string
             example: example@gmail.com
-          userIdId:
-            description: "Contact's user id"
-            type: string
-            example: 68eaaf8fa9ad4f0487d3d847
           contactType:
             description: "Contact's type"
             type: string

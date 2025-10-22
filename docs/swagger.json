@@ -187,10 +187,7 @@
                   "name",
                   "phoneNumber",
                   "email",
-                  "userId",
-                  "contactType",
-                  "createdAt",
-                  "updatedAt"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -200,18 +197,13 @@
                   },
                   "phoneNumber": {
                     "description": "Contact's phone number",
-                    "type": "number",
-                    "example": 556987452
+                    "type": "string",
+                    "example": "+380556987452"
                   },
                   "email": {
                     "description": "Contact's email",
                     "type": "string",
                     "example": "example@gmail.com"
-                  },
-                  "userIdId": {
-                    "description": "Contact's user id",
-                    "type": "string",
-                    "example": "68eaaf8fa9ad4f0487d3d847"
                   },
                   "contactType": {
                     "description": "Contact's type",
@@ -382,6 +374,22 @@
                   "phoneNumber": {
                     "type": "string",
                     "example": "+380665556677"
+                  },
+                  "contactType": {
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ]
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 },
                 "description": "Fields to update (at least one field is required)"
